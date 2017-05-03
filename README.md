@@ -10,8 +10,8 @@ In each of the folders in `tests` is a folder with the code and resources needed
 * `md5.odin` - Implementation of the MD5 hashing algorithm in pure Odin.
     * `hash([]byte): string` Takes a single messages and return it's hash.
 * `strhelpers.odin` - String helper functions.
-    * `indexOf(string, string): int` takes a `string` to search in, and a `string` to search for. Can also search for `rune`s and `byte`s.
-    * `startsWith(string, string): bool` takes a `string` to search in, and a `string` to search for. Can also search for `rune`s and `byte`s.
+    * `indexOf(string, string): int` Takes a `string` to search in, and a `string` to search for. Can also search for `rune`s and `byte`s.
+    * `startsWith(string, string): bool` Takes a `string` to search in, and a `string` to search for. Can also search for `rune`s and `byte`s.
 
 
 
