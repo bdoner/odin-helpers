@@ -1,0 +1,26 @@
+{
+	"folders":
+	[
+		{
+			"path": ".",
+			"file_exclude_patterns": [
+				"*.ll",
+				"*.bc",
+				"*.exe",
+				"*.obj"
+			]
+		}
+	],
+	"settings":
+	{
+		"tab_size": 4
+	},
+	"build_systems":
+	[
+		{
+			"name": "Odin",
+			"shell_cmd": "\"C:\\Program Files (x86)\\Microsoft Visual Studio 14.0\\VC\\vcvarsall.bat\" x64 & odin run $file",
+			"file_regex": "(?<filename>[a-z0-9_\\-]+\\.odin)\\((?<line number>[0-9]+):(?<column number>[0-9]+)\\)(?<error message>.*)$"
+		}
+	]
+}
