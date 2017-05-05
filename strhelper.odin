@@ -60,3 +60,40 @@ indexOf :: proc(str, s: string) -> int {
 	}
 	return index;
 }
+
+join :: proc(list: []string, d: string) -> string {
+	if len(list) == 0 {
+		return "";
+	}
+	newLen := 0;
+	for s in list {
+		newLen = newLen + len(s);
+	}
+	newLen += (len(list) - 1) * len(d);
+
+	c := 0;
+	newStr := make([]byte, newLen);
+	for s, i in list {
+		for r in s {
+			newStr[c] = byte(r);
+			c++;
+		}
+		if i < len(list) - 1 {
+			for r in d {
+				newStr[c] = byte(r);
+				c++;
+			}
+		}
+	}
+	return string(newStr);
+
+}
+
+/*
+main :: proc() {
+	fmt.printf("%s\n", join([]string{"ab"}, ""));
+	fmt.printf("['a', 'b', 'c'].join(\",\") = %v\n", join([]string{"a","b","c"}, ","));
+	fmt.printf("['a', 'b', 'c'].join(\" - \") = %v\n", join([]string{"a","b","c"}, " - "));
+	fmt.printf("['a', 'b', 'c'].join(\"\") = %v\n\n", join([]string{"a","b","c"}, ""));
+}
+*/
