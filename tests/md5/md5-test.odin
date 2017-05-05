@@ -1,18 +1,17 @@
 #import fmt "fmt.odin";
 #import os "os.odin";
-#import md5 "../md5.odin";
+#import md5 "../../md5.odin";
 
 _md5_test :: struct {
 	str, hash: string
 }
 
-main :: proc() {
-	INPUT_PATH :: "md5-test.txt";
+run :: proc(testFile: string) {
 	//NOTE IMPORTANT: md5-test.txt MUST use Unix line endings!
-	file_cont, success := os.read_entire_file(INPUT_PATH);
+	file_cont, success := os.read_entire_file(testFile);
 
 	if ! success {
-		fmt.printf("Can't read file %s :(\n", INPUT_PATH);
+		fmt.printf("Can't read file %s :(\n", testFile);
 		return;
 	}
 
@@ -56,4 +55,10 @@ main :: proc() {
 			panic(test.str);
 		}
 	}
+}
+
+main :: proc() {
+	INPUT_PATH :: "md5-test.txt";
+	run(INPUT_PATH);
+	
 }
