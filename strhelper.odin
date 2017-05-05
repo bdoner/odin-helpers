@@ -78,25 +78,6 @@ indexOf :: proc(str, s: string) -> int {
 		}
 	}
 	
-
-	
-	/*
-	#label outer for b, i in str {
-		if b == rune(s[0]) {
-			//fmt.printf("o > %d %d\n", b, s[0]);
-			#label inner for sj, j in s {
-				//fmt.printf("i > %d %d\n", str[i+j], s[j]);
-				if j == len(s)-1 {
-					index = i;
-					break outer;
-				}
-				if str[i+j] != s[j] {
-					break inner;
-				}
-			}
-		}
-	}
-	*/
 	return index;
 }
 
@@ -110,25 +91,24 @@ join :: proc(list: []string, d: string) -> string {
 	}
 	newLen += (len(list) - 1) * len(d);
 
-	//c := 0;
 	newStr := make([]byte, 0, newLen);
 	for s, i in list {
 		append(newStr, ..[]byte(s));
 		append(newStr, ..[]byte(d));
-		/*for r in s {
-			newStr[c] = byte(r);
-			c++;
-		}
-		if i < len(list) - 1 {
-			for r in d {
-				newStr[c] = byte(r);
-				c++;
-			}
-		}*/
 	}
 	return string(newStr);
 
 }
+
+join :: proc(list: []string, d: byte) -> string { 
+	return join(list, string([]byte{d}));
+}
+
+join :: proc(list: []string, d: rune) -> string {
+	str, size := utf8.encode_rune(d);
+	return join(list, string(str[..]));
+}
+
 
 
 main :: proc() {
@@ -139,10 +119,10 @@ main :: proc() {
 	fmt.printf("%v\n", indexOf("ab😇abcd", "😇ab"));
 	*/
 	
-	/*
-	fmt.printf("['a', 'b', 'c'].join(\",\") = %v\n", join([]string{"😇","b","😇"}, ","));
-	fmt.printf("['a', 'b', 'c'].join(\" - \") = %v\n", join([]string{"a","b","c"}, " - "));
-	fmt.printf("['a', 'b', 'c'].join(\"\") = %v\n\n", join([]string{"a","b","c"}, ""));
-	*/
+	
+	fmt.printf("['a', 'b', 'c'].join(\",\") = %v\n", join([]string{"a","b","c"}, '😇'));
+	fmt.printf("['a', 'b', 'c'].join(\" - \") = %v\n", join([]string{"a","b","c"}, " 😇 "));
+	fmt.printf("['a', 'b', 'c'].join(\"\") = %v\n\n", join([]string{"a","b","c"}, byte(',')));
+	
 }
 

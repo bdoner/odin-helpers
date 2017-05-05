@@ -12,6 +12,7 @@ In each of the folders in `tests` is a folder with the code and resources needed
 * `strhelpers.odin` - String helper functions.
     * `indexOf(string, string): int` Takes a `string` to search in, and a `string` to search for. Can also search for `rune`s and `byte`s.
     * `startsWith(string, string): bool` Takes a `string` to search in, and a `string` to search for. Can also search for `rune`s and `byte`s.
+    * `join([]string, string): string` Takes a `[]string` to join with the separator. Separator can also be a `rune` or a `byte`.
 
 
 
