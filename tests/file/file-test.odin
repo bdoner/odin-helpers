@@ -2,7 +2,9 @@
 #import fmt "fmt.odin";
 
 run :: proc(testFile: string) {
-	lines, s := file.read_lines(testFile);
+	lines: []string;
+	s: bool;
+	lines, s = file.read_lines(testFile);
 
 	if !s {
 		fmt.println(" :( ");
@@ -10,18 +12,19 @@ run :: proc(testFile: string) {
 
 	expected := []string{
 		"a",
-		"bb",
-		"",
-		"ccc",
-		"1"
+		"b",
+		" ",
+		"c",
+		"d",
+		""
 	};
 
 
-	fmt.printf("Same length: %v\n", len(lines) == len(expected));
-
-	for line, i in lines {
-		fmt.printf("#%d '%s' == '%s' = %v\n", i, line, expected[i], line == expected[i]);
+	fmt.printf("-----\nSame length (%d == %d): %v\n", len(lines), len(expected), len(lines) == len(expected));	
+	for i := 0; i < len(lines); i++ {
+		fmt.printf("#%d '%s' == '%s' = %v\n", i, lines[i], expected[i], lines[i] == expected[i]);
 	}
+	
 }
 
 main :: proc() {

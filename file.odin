@@ -1,22 +1,16 @@
 #import os "os.odin";
 #import utf8 "utf8.odin";
-#import fmt "fmt.odin";
+//#import fmt "fmt.odin";
 
 read_lines :: proc(path: string) -> ([]string, bool) {
 
 	is_newline :: proc(i: int, arr: []byte) -> (bool, int) {
-		if ((len(arr)-1 > i && arr[i] == '\r' && arr[i+1] == '\n') && arr[i] != '\n' && arr[i] != '\r') ||
-			(arr[i] == '\n' && arr[i] != '\r' && !(len(arr)-1 > i && arr[i] == '\r' && arr[i+1] == '\n')) || 
-			(arr[i] == '\r' && arr[i] != '\n' && !(len(arr)-1 > i && arr[i] == '\r' && arr[i+1] == '\n')) {
-	//			fmt.printf("%v ", arr[i]);
-	//			if len(arr)-1 > i {
-	//				fmt.printf("%v", arr[i+1]);
-	//			}
-	//			fmt.println();
-
-				if (len(arr)-1 > i && arr[i] == '\r' && arr[i+1] == '\n') {
+		if arr[i] == '\n' || arr[i] == '\r' {
+				if len(arr)-1 > i && arr[i] == '\r' && arr[i+1] == '\n' {
+					//fmt.printf("CR NL\n");
 					return true, 2;
 				}
+				//fmt.printf("%s\n", arr[i] == 0x0D ? "CR" : "NL");
 				return true, 1;
 			}
 
@@ -26,22 +20,29 @@ read_lines :: proc(path: string) -> ([]string, bool) {
 	fileCont, success := os.read_entire_file(path);
 	//fmt.printf("%v\n------\n", fileCont);
 	if !success {
+		//empty := make([]string, 0);
 		return []string{}, success;
 	}
 
 	fileLength := len(fileCont);
-	lineCount := 0;
+	lineCount := 1;
 	lastNewline := 0;
-	for c, i in fileCont {
-		nl, _ := is_newline(i, fileCont);
+	for i := 0; i < fileLength; i++ {
+		nl, nll := is_newline(i, fileCont);
 		if nl {
 			lineCount++;
 			lastNewline = i;
+			i += nll-1;
 		}
 	}
-	if fileLength-1 > lastNewline {
-		lineCount++;
-	}
+	//endsWithLF, _ := is_newline(fileLength-1, fileCont);
+	//if endsWithLF {
+		//lineCount++;
+	//}
+
+	//fmt.printf("------\nlnl: %d\n", lastNewline);
+	//fmt.printf("------\nfl: %d\n", fileLength);
+	//fmt.printf("------\nlines: %d\n", lineCount);
 	//fmt.println("------");
 	foundLines := 0;
 	lines := make([]string, lineCount);	
@@ -49,47 +50,42 @@ read_lines :: proc(path: string) -> ([]string, bool) {
 		r: rune;
 		r, size = utf8.decode_rune(fileCont[i..]);
 
-		eof := i == fileLength - 1;
 		nl, nll := is_newline(i, fileCont);
-		if nl || eof {
-	//		fmt.printf("%d\n", nll);
-			end := nll == 2 ? i-nll-1 : i;
-			lines[foundLines] = string(fileCont[offset..<end]);
-			foundLines++;
-			offset = i + nll;
-			i += nll-1;
+		if nl {
 			
+			//fmt.printf("nll: %d\n", nll);
+			//fmt.printf("offset: %v\n", offset);
+			//fmt.printf("i: %v\n", i);
+
+			lines[foundLines] = string(fileCont[offset..<i]);			
+			
+			//fmt.printf("line: '%s'\n", lines[foundLines]);
+			//fmt.printf("line #: %d\n", foundLines);
+			//fmt.printf("-\n");
+			foundLines++;
+			i += nll;
+			offset = i;
 		} 
+
+		eof := i >= fileLength-1;
+		if eof {
+			//fmt.printf("nll: %d\n", nll);
+			//fmt.printf("eof: %v\n", eof);
+			//fmt.printf("offset: %v\n", offset);
+			//fmt.printf("i: %v\n", fileLength);
+			lines[foundLines] = string(fileCont[offset..<fileLength]);
+			//fmt.printf("line: '%s'\n", lines[foundLines]);
+			//fmt.printf("line #: %d\n", foundLines);
+
+
+			i += nll;
+			offset = i;
+		}
+		
 	}
 
 	return lines, true;
 }
 
-/*
-run :: proc(testFile: string) {
-	lines, s := read_lines(testFile);
-
-	if !s {
-		fmt.println(" :( ");
-	}
-
-	expected := []string{
-		"a",
-		"bb",
-		"",
-		"ccc",
-		"1"
-	};
 
 
-	fmt.printf("Same length (%d == %d): %v\n", len(lines), len(expected), len(lines) == len(expected));
-
-	for line, i in lines {
-		fmt.printf("#%d '%s' == '%s' = %v\n", i, line, expected[i], line == expected[i]);
-	}
-}
-
-main :: proc() {
-	run("tests/file/file-test.txt");
-}
-*/
