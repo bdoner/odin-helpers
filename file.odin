@@ -45,7 +45,8 @@ read_lines :: proc(path: string) -> ([]string, bool) {
 	//fmt.printf("------\nlines: %d\n", lineCount);
 	//fmt.println("------");
 	foundLines := 0;
-	lines := make([]string, lineCount);	
+	lines := make([]string, lineCount);
+	//defer free(lines);
 	for offset, i, size := 0, 0, 0; i < fileLength; i += size {
 		r: rune;
 		r, size = utf8.decode_rune(fileCont[i..]);

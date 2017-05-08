@@ -5,6 +5,7 @@ run :: proc(testFile: string) {
 	lines: []string;
 	s: bool;
 	lines, s = file.read_lines(testFile);
+	defer free(lines);
 
 	if !s {
 		fmt.println(" :( ");
@@ -21,8 +22,9 @@ run :: proc(testFile: string) {
 
 
 	fmt.printf("-----\nSame length (%d == %d): %v\n", len(lines), len(expected), len(lines) == len(expected));	
-	for i := 0; i < len(lines); i++ {
-		fmt.printf("#%d '%s' == '%s' = %v\n", i, lines[i], expected[i], lines[i] == expected[i]);
+	for line, i in lines {
+		fmt.printf("#%d ", i);
+		fmt.printf("'%s' == '%s' = %v\n", line, expected[i], line == expected[i]);
 	}
 	
 }
