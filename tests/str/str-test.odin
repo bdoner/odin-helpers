@@ -13,12 +13,15 @@ run :: proc() {
 
 	printf("'abc'.indexOf(byte('a')) = %v\n", str.indexOf("abc", byte('a')));
 	printf("'abc'.indexOf(byte('b')) = %v\n", str.indexOf("abc", byte('b')));
+	printf("'abc'.indexOf(byte('c')) = %v\n", str.indexOf("abc", byte('c')));
 	printf("'abc'.indexOf(byte('d')) = %v\n\n", str.indexOf("abc", byte('d')));
 	
 	printf("'abc'.indexOf(\"ab\") = %v\n", str.indexOf("abc", "ab"));
 	printf("'abc'.indexOf(\"bc\") = %v\n", str.indexOf("abc", "bc"));
 	printf("'abc'.indexOf(\"de\") = %v\n", str.indexOf("abc", "de"));
-	printf("'abc'.indexOf(\"defdhfdg\") = %v\n\n", str.indexOf("abc", "defdhfdg"));
+	printf("'abc'.indexOf(\"defdhfdg\") = %v\n", str.indexOf("abc", "defdhfdg"));
+	printf("'ugknbfddgicrmopn'.indexOf(\"cd\") = %v\n", str.indexOf("ugknbfddgicrmopn", "cd"));
+	printf("'ugknbfddgicrmopn'.indexOf(\"cr\") = %v\n\n", str.indexOf("ugknbfddgicrmopn", "cr"));
 
 	printf("[\"a\", \"b\", \"c\"].join(\",\") = '%v'\n", str.join([]string{"a","b","c"}, ","));
 	printf("[\"a\", \"b\", \"c\"].join(\" - \") = '%v'\n", str.join([]string{"a","b","c"}, " - "));

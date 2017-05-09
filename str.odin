@@ -52,26 +52,30 @@ indexOf :: proc(str: string, s: byte) -> int {
 	return indexOf(str, rune(s));;
 }
 
-indexOf :: proc(str, s: string) -> int {
+indexOf :: proc(str, pattern: string) -> int {
 
 	index := -1;
-	firstRune, _ := utf8.decode_rune(s);
-	#label outer for i, size := 0, 0; i < len(str); i += size {
+	firstRuneInPattern, _ := utf8.decode_rune(pattern);
+	#label outer for i, size := 0, 0; i < len(str)-len(pattern)+1; i += size {
 		r: rune;
 		r, size = utf8.decode_rune(str[i..]);
-		if r == firstRune {
-			index = 1;
-			#label inner for j, size2 := 0, 0; j < len(s); j += size2 {
-				if j == len(s)-1 {
+		if r == firstRuneInPattern {
+			index = i;
+			//fmt.printf("First match at %d\n", i);
+			#label inner for j, size2 := 0, 0; j < len(pattern); j += size2 {
+				if j == len(pattern) {
+					//fmt.printf("j == len(pattern)-1 j: %d, len(pattern): %d\n", j, len(pattern));
 					index = i;
 					break outer;
 				}
 
 				t: rune;
 				r, size = utf8.decode_rune(str[i+j..]);
-				t, size2 = utf8.decode_rune(s[j..]);
+				t, size2 = utf8.decode_rune(pattern[j..]);
 
+				//fmt.printf("r: %d, t: %d\n", r, t);
 				if r != t {
+					index = -1;
 					break inner;
 				}
 			}
@@ -109,7 +113,7 @@ join :: proc(list: []string, d: rune) -> string {
 	return join(list, string(str[..]));
 }
 
-
+/*
 
 main :: proc() {
 	/*
@@ -118,11 +122,15 @@ main :: proc() {
 	fmt.printf("%v\n", indexOf("ab", "😇"));
 	fmt.printf("%v\n", indexOf("ab😇abcd", "😇ab"));
 	*/
+
+	fmt.printf("'ugknbfddgicrmopn'.indexOf(\"cd\") = %v\n\n", indexOf("ugknbfddgicrmopn", "cd"));
+	fmt.printf("'ugknbfddgicrmopn'.indexOf(\"cr\") = %v\n\n", indexOf("ugknbfddgicrmopn", "cr"));
 	
-	
+	/*
 	fmt.printf("['a', 'b', 'c'].join(\",\") = %v\n", join([]string{"a","b","c"}, '😇'));
 	fmt.printf("['a', 'b', 'c'].join(\" - \") = %v\n", join([]string{"a","b","c"}, " 😇 "));
 	fmt.printf("['a', 'b', 'c'].join(\"\") = %v\n\n", join([]string{"a","b","c"}, byte(',')));
-	
+	*/
 }
 
+*/
