@@ -113,6 +113,40 @@ join :: proc(list: []string, d: rune) -> string {
 	return join(list, string(str[..]));
 }
 
+split :: proc(input: string, d: rune) -> []string {
+	delCount := 1;
+	inputLen := len(input);
+	for b in input {
+		if b == d {
+			delCount++;
+		}
+	}
+
+	lines := make([]string, delCount);
+	foundLines := 0;
+	for offset, i, size := 0, 0, 0; i < inputLen; i += size {
+		r: rune;
+		r, size = utf8.decode_rune(input[i..]);
+
+		if r == d {
+			lines[foundLines] = string(input[offset..<i]);
+			
+
+			foundLines++;
+			//i += 1;
+			offset = i+1;
+		}
+
+		eof := i >= inputLen-1;
+		if eof {
+			lines[foundLines] = string(input[offset..<inputLen]);
+			break;
+		}	
+	}
+
+	return lines;
+}
+
 /*
 
 main :: proc() {
