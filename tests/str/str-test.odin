@@ -6,17 +6,17 @@ import(
 run :: proc() {
 	using fmt;
 
-	printf("startsWith(\"abc\", byte('a')) = %v\n", str.startsWith("abc", byte('a')));
-	printf("startsWith(\"abc\", byte('b')) = %v\n\n", str.startsWith("abc", byte('b')));
+	printf("startsWith(\"abc\", u8('a')) = %v\n", str.startsWith("abc", u8('a')));
+	printf("startsWith(\"abc\", u8('b')) = %v\n\n", str.startsWith("abc", u8('b')));
 	
 	printf("startsWith(\"abc\", \"ab\") = %v\n", str.startsWith("abc", "ab"));
 	printf("startsWith(\"abc\", \"bc\") = %v\n\n", str.startsWith("abc", "bc"));
 	
 
-	printf("indexOf(\"abc\", byte('a')) = %v\n", str.indexOf("abc", byte('a')));
-	printf("indexOf(\"abc\", byte('b')) = %v\n", str.indexOf("abc", byte('b')));
-	printf("indexOf(\"abc\", byte('c')) = %v\n", str.indexOf("abc", byte('c')));
-	printf("indexOf(\"abc\", byte('d')) = %v\n\n", str.indexOf("abc", byte('d')));
+	printf("indexOf(\"abc\", u8('a')) = %v\n", str.indexOf("abc", u8('a')));
+	printf("indexOf(\"abc\", u8('b')) = %v\n", str.indexOf("abc", u8('b')));
+	printf("indexOf(\"abc\", u8('c')) = %v\n", str.indexOf("abc", u8('c')));
+	printf("indexOf(\"abc\", u8('d')) = %v\n\n", str.indexOf("abc", u8('d')));
 	
 	printf("indexOf(\"abc\", \"ab\") = %v\n", str.indexOf("abc", "ab"));
 	printf("indexOf(\"abc\", \"bc\") = %v\n", str.indexOf("abc", "bc"));
