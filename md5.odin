@@ -36,7 +36,7 @@ __I :: proc(X, Y, Z: u32) -> u32 {
 
 
 __rol :: proc(val, shifts: u32) -> u32 {
-	bits : u32 = size_of_val(val) * 8;
+	bits : u32 = 4 * 8; //4 bytes = 32 bits
 	a := val >> (bits - (shifts % bits));
 	b := val << shifts;
 	return a | b;
@@ -49,7 +49,7 @@ __cpy :: proc(src: ^[]u8, dst: ^[]u8, offset, count: int) {
 }
 
 __flip :: proc(i: u32) -> u32 {
-	return (i & 0x000000FF) << ((size_of_val(i) - 1) * 8) | (i & 0x0000FF00) << 8 | (i & 0x00FF0000) >> 8 | (i & 0xFF000000) >> ((size_of_val(i) - 1) * 8);
+	return (i & 0x000000FF) << ((4 - 1) * 8) | (i & 0x0000FF00) << 8 | (i & 0x00FF0000) >> 8 | (i & 0xFF000000) >> ((4 - 1) * 8);
 }
 
 __trn1 :: proc(a, b, c, d: ^u32, k, s, i: u32, X: ^[16]u32) {

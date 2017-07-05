@@ -96,7 +96,8 @@ run :: proc(testFile: string) {
 	}
 	
 }
-
+/*
 main :: proc() {
 	run("tests/file/file-test.txt");
 }
+*/

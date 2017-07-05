@@ -1,6 +1,8 @@
-#import fmt "fmt.odin";
-#import os "os.odin";
-#import md5 "../../md5.odin";
+import(
+	fmt "fmt.odin";
+	os "os.odin";
+	md5 "../../md5.odin";
+);
 
 _md5_test :: struct {
 	str, hash: string
@@ -27,13 +29,13 @@ run :: proc(testFile: string) {
 	for char in file_cont {
 		//fmt.println(index);
 		if char == ':' {
-			word := make([]byte, index - offset);
+			word := make([]u8, index - offset);
 			for b, i in file_cont[offset..<index] {
 				word[i] = b;
 			}
 			offset = index + 1; //+1 for the :
 
-			hash := make([]byte, 32);
+			hash := make([]u8, 32);
 			for b, i in file_cont[offset..<offset+32] {
 				hash[i] = b;
 			}
@@ -49,7 +51,7 @@ run :: proc(testFile: string) {
 	
 	
 	for test in tests {
-		h := md5.hash([]byte(test.str));
+		h := md5.hash([]u8(test.str));
 		fmt.printf("'%s' ('%s' == '%s'): %v\n", test.str, h, test.hash, h == test.hash);
 		if test.hash != h {
 			panic(test.str);
