@@ -1,4 +1,5 @@
-immutable _T : [64]u32 = [64]u32 { 
+
+_T := [64]u32{ 
 		0xD76AA478,   0xE8C7B756,   0x242070DB,   0xC1BDCEEE,
 		0xF57C0FAF,   0x4787C62A,   0xA8304613,   0xFD469501,
 		0x698098D8,   0x8B44F7AF,   0xFFFF5BB1,   0x895CD7BE,
@@ -14,7 +15,8 @@ immutable _T : [64]u32 = [64]u32 {
 		0xF4292244,   0x432AFF97,   0xAB9423A7,   0xFC93A039,
 		0x655B59C3,   0x8F0CCC92,   0xFFEFF47D,   0x85845DD1,
 		0x6FA87E4F,   0xFE2CE6E0,   0xA3014314,   0x4E0811A1,
-		0xF7537E82,   0xBD3AF235,   0x2AD7D2BB,   0xEB86D391 };
+		0xF7537E82,   0xBD3AF235,   0x2AD7D2BB,   0xEB86D391 
+};
 
 __F :: proc(X, Y, Z: u32) -> u32 {
 	return (X & Y) | (~X) & Z;
@@ -40,7 +42,7 @@ __rol :: proc(val, shifts: u32) -> u32 {
 	return a | b;
 }
 
-__cpy :: proc(src: ^[]byte, dst: ^[]byte, offset, count: int) {
+__cpy :: proc(src: ^[]u8, dst: ^[]u8, offset, count: int) {
 	for i := offset; i < count; i++ {
 		dst[i] = src[i];
 	}
@@ -69,7 +71,7 @@ __trn4 :: proc(a, b, c, d: ^u32, k, s, i: u32, X: ^[16]u32) {
 	a^ = b^ + __rol(a^ + __I(b^, c^, d^) + X^[k] + _T[i-1], s);
 }
 
-hash :: proc(data_in: []byte) -> string {
+hash :: proc(data_in: []u8) -> string {
 	// https://www.ietf.org/rfc/rfc1321.txt
 	// http://motp.sourceforge.net/MD5.java
 	// https://rosettacode.org/wiki/MD5/Implementation_Debug
@@ -85,14 +87,14 @@ hash :: proc(data_in: []byte) -> string {
 	}
 
 	newLen : int = dataLen + paddingLength + 8; 
-	padded := make([]byte, newLen);
+	padded := make([]u8, newLen);
 	defer free(padded);
 
 	__cpy(&data_in, &padded, 0, dataLen);
 	padded[dataLen] = 0x80;
 
 	for i := 8; i > 0; i-- {
-		padded[newLen-i] = byte((dataLen*8) >> uint(((8 - i) * 8)) & 0x00000000000000ff);
+		padded[newLen-i] = u8((dataLen*8) >> uint(((8 - i) * 8)) & 0x00000000000000ff);
 	}
 
 	pwLen := newLen/4;
@@ -199,22 +201,22 @@ hash :: proc(data_in: []byte) -> string {
 	}
 
 
-	outp := make([]byte, 16);
+	outp := make([]u8, 16);
 	defer free(outp);
 	for i in 0..<4 {
-		outp[i + 0] = byte(A >> u8(i * 8));
+		outp[i + 0] = u8(A >> u8(i * 8));
 	}
 	for i in 0..<4{
-		outp[i + 4] = byte(B >> u8(i * 8));
+		outp[i + 4] = u8(B >> u8(i * 8));
 	}
 	for i in 0..<4 {
-		outp[i + 8] = byte(C >> u8(i * 8));
+		outp[i + 8] = u8(C >> u8(i * 8));
 	}
 	for i in 0..<4 {
-		outp[i +12] = byte(D >> u8(i * 8));
+		outp[i +12] = u8(D >> u8(i * 8));
 	}
 
-	outps := make([]byte, 32);
+	outps := make([]u8, 32);
 	defer free(outps);
 	hexChars := "0123456789abcdef";
 	for b, i in outp {

@@ -1,5 +1,7 @@
-#import "fmt.odin";
-#import "utf8.odin";
+import(
+	"fmt.odin";
+	"utf8.odin";
+);
 
 startsWith :: proc(str, s: string) -> bool {
 	if len(s) > len(str) {
@@ -34,7 +36,7 @@ startsWith :: proc(str: string, s: rune) -> bool {
 	return r == s;
 }
 
-startsWith :: proc(str: string, s: byte) -> bool {
+startsWith :: proc(str: string, s: u8) -> bool {
 	return startsWith(str, rune(s));
 }
 
@@ -48,7 +50,7 @@ indexOf :: proc(str: string, s: rune) -> int {
 	return -1;
 }
 
-indexOf :: proc(str: string, s: byte) -> int {
+indexOf :: proc(str: string, s: u8) -> int {
 	return indexOf(str, rune(s));;
 }
 
@@ -56,13 +58,13 @@ indexOf :: proc(str, pattern: string) -> int {
 
 	index := -1;
 	firstRuneInPattern, _ := utf8.decode_rune(pattern);
-	#label outer for i, size := 0, 0; i < len(str)-len(pattern)+1; i += size {
+	outer: for i, size := 0, 0; i < len(str)-len(pattern)+1; i += size {
 		r: rune;
 		r, size = utf8.decode_rune(str[i..]);
 		if r == firstRuneInPattern {
 			index = i;
 			//fmt.printf("First match at %d\n", i);
-			#label inner for j, size2 := 0, 0; j < len(pattern); j += size2 {
+			inner: for j, size2 := 0, 0; j < len(pattern); j += size2 {
 				if j == len(pattern) {
 					//fmt.printf("j == len(pattern)-1 j: %d, len(pattern): %d\n", j, len(pattern));
 					index = i;
@@ -95,17 +97,17 @@ join :: proc(list: []string, d: string) -> string {
 	}
 	newLen += (len(list) - 1) * len(d);
 
-	newStr := make([]byte, 0, newLen);
+	newStr := make([]u8, 0, newLen);
 	for s, i in list {
-		append(newStr, ..[]byte(s));
-		append(newStr, ..[]byte(d));
+		append(&newStr, ..[]u8(s));
+		append(&newStr, ..[]u8(d));
 	}
 	return string(newStr);
 
 }
 
-join :: proc(list: []string, d: byte) -> string { 
-	return join(list, string([]byte{d}));
+join :: proc(list: []string, d: u8) -> string { 
+	return join(list, string([]u8{d}));
 }
 
 join :: proc(list: []string, d: rune) -> string {
@@ -150,21 +152,21 @@ split :: proc(input: string, d: rune) -> []string {
 /*
 
 main :: proc() {
-	/*
+	
 	fmt.printf("%v\n", indexOf("😇abcd", '😇'));
 	fmt.printf("%v\n", indexOf("😇abcd", "😇"));
 	fmt.printf("%v\n", indexOf("ab", "😇"));
 	fmt.printf("%v\n", indexOf("ab😇abcd", "😇ab"));
-	*/
+	
 
 	fmt.printf("'ugknbfddgicrmopn'.indexOf(\"cd\") = %v\n\n", indexOf("ugknbfddgicrmopn", "cd"));
 	fmt.printf("'ugknbfddgicrmopn'.indexOf(\"cr\") = %v\n\n", indexOf("ugknbfddgicrmopn", "cr"));
 	
-	/*
-	fmt.printf("['a', 'b', 'c'].join(\",\") = %v\n", join([]string{"a","b","c"}, '😇'));
-	fmt.printf("['a', 'b', 'c'].join(\" - \") = %v\n", join([]string{"a","b","c"}, " 😇 "));
-	fmt.printf("['a', 'b', 'c'].join(\"\") = %v\n\n", join([]string{"a","b","c"}, byte(',')));
-	*/
+	
+	fmt.printf("['a', 'b', 'c'].join(\"😇\") = %v\n", join([]string{"a","b","c"}, '😇'));
+	fmt.printf("['a', 'b', 'c'].join(\" 😇 \") = %v\n", join([]string{"a","b","c"}, " 😇 "));
+	fmt.printf("['a', 'b', 'c'].join(\",\") = %v\n\n", join([]string{"a","b","c"}, u8(',')));
+	
 }
 
 */

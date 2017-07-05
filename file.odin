@@ -1,10 +1,12 @@
-#import os "os.odin";
-#import utf8 "utf8.odin";
-//#import fmt "fmt.odin";
+import( 
+	os "os.odin";
+	utf8 "utf8.odin";
+	fmt "fmt.odin";
+);
 
 read_lines :: proc(path: string) -> ([]string, bool) {
 
-	is_newline :: proc(i: int, arr: []byte) -> (bool, int) {
+	is_newline :: proc(i: int, arr: []u8) -> (bool, int) {
 		if arr[i] == '\n' || arr[i] == '\r' {
 				if len(arr)-1 > i && arr[i] == '\r' && arr[i+1] == '\n' {
 					return true, 2;
@@ -66,7 +68,6 @@ read_lines :: proc(path: string) -> ([]string, bool) {
 }
 
 
-#import "fmt.odin";
 run :: proc(testFile: string) {
 	lines: []string;
 	s: bool;
