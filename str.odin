@@ -149,10 +149,70 @@ split :: proc(input: string, d: rune) -> []string {
 	return lines;
 }
 
-/*
+_whitespaceChars := []rune {
+	0x0020, 0x1680, 0x2000, 0x2001,
+	0x2002, 0x2003, 0x2004, 0x2005,
+	0x2006, 0x2007, 0x2008, 0x2009,
+	0x200A, 0x202F, 0x205F, 0x3000,
+	0x2028, 0x2029, 0x0009, 0x000A,
+	0x000B, 0x000C, 0x000D, 0x0085,
+	0x00A0 };
+
+_isOneOf :: proc(r: rune, a: []rune) -> bool {
+	for ru in a {
+		if r == ru {
+			return true;
+		}
+	}
+	return false;
+}
+
+trimStart :: proc(input: string) -> string {
+	index := 0;
+	for i, size := 0, 0; i < len(input); i += size {
+		r: rune;
+		r, size = utf8.decode_rune(input[i..]);
+		if _isOneOf(r, _whitespaceChars) {
+			index = i + 1;
+		}
+		else {
+			break;
+		}
+
+	}
+
+	//fmt.println(index);
+	return input[index..];
+}
+
+trimEnd :: proc(input: string) -> string {
+	index := len(input) - 1;
+	for i, size := index, 0; i >= 0; i -= size {
+		//fmt.printf("%d\n", i);
+		r: rune;
+		r, size = utf8.decode_rune(input[i..]);
+		if _isOneOf(r, _whitespaceChars) {
+			//fmt.printf("%r is whitespace at index %d\n", r, i);
+			index = i - 1;
+		}
+		else {
+			//fmt.printf("%r is NOT whitespace at index %d\n", r, i);
+			break;
+		}
+	}
+
+	//fmt.println(index);
+	//fmt.println(len(input));
+	return input[0..index];
+}
+
+trim :: proc(input: string) -> string {
+	return trimStart(trimEnd(input));
+}
 
 main :: proc() {
 	
+	/*
 	fmt.printf("%v\n", indexOf("😇abcd", '😇'));
 	fmt.printf("%v\n", indexOf("😇abcd", "😇"));
 	fmt.printf("%v\n", indexOf("ab", "😇"));
@@ -166,7 +226,19 @@ main :: proc() {
 	fmt.printf("['a', 'b', 'c'].join(\"😇\") = %v\n", join([]string{"a","b","c"}, '😇'));
 	fmt.printf("['a', 'b', 'c'].join(\" 😇 \") = %v\n", join([]string{"a","b","c"}, " 😇 "));
 	fmt.printf("['a', 'b', 'c'].join(\",\") = %v\n\n", join([]string{"a","b","c"}, u8(',')));
+	*/
+/*
+	fmt.printf("'abc' = '%s'\n", trimStart("abc"));
+	fmt.printf("' 	abc' = '%s'\n", trimStart(" 	abc"));
+
+	fmt.printf("'abc' = '%s'\n", trimEnd("abc"));
+	fmt.printf("'abc 	' = '%s'\n", trimEnd("abc 	"));
+	fmt.printf("'abc    	' = '%s'\n", trimEnd("abc    	"));
+*/
+	fmt.printf("'abc' = '%s'\n", trim("abc"));
+	fmt.printf("' 	abc' = '%s'\n", trim(" 	abc"));
+	fmt.printf("'abc' = '%s'\n", trim("abc"));
+	fmt.printf("'abc 	' = '%s'\n", trim("abc 	"));
 	
 }
 
-*/
