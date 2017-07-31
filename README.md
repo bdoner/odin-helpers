@@ -8,11 +8,12 @@ In each of the folders in `tests` is a folder with the code and resources needed
 
 ### Following is done:
 * `md5.odin` - Implementation of the MD5 hashing algorithm in pure Odin.
-    * `hash([]byte): string` Takes a single messages and return it's hash.
+    * `hash([]u8): string` Takes a single messages and return it's hash.
 * `str.odin` - String helper procedures.
-    * `indexOf(string, string): int` Takes a `string` to search in, and a `string` to search for. Can also search for `rune`s and `byte`s.
-    * `startsWith(string, string): bool` Takes a `string` to search in, and a `string` to search for. Can also search for `rune`s and `byte`s.
-    * `join([]string, string): string` Takes a `[]string` to join with the separator. Separator can also be a `rune` or a `byte`.
+    * `indexOf(string, string): int` Takes a `string` to search in, and a `string` to search for. Can also search for `rune`s and `u8`s.
+    * `lastIndexOf(string, string): int` Takes a `string` to search in, and a `string` to search for. Searches from end to beginning of the string. Can also search for `rune`s and `u8`s.
+    * `startsWith(string, string): bool` Takes a `string` to search in, and a `string` to search for. Can also search for `rune`s and `u8`s.
+    * `join([]string, string): string` Takes a `[]string` to join with the separator. Separator can also be a `rune` or a `u8`.
     * `split(string, rune): []string` Takes a ´string´ and split it into a list of `string`s using a single separator.
     * `trimStart(string): string` Takes a `string` and trim the leading whitespace.
     * `trimEnd(string): string` Takes a `string` and trim the trailing whitespace.

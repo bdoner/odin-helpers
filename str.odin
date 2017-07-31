@@ -55,7 +55,6 @@ indexOf :: proc(str: string, s: u8) -> int {
 }
 
 indexOf :: proc(str, pattern: string) -> int {
-
 	index := -1;
 	firstRuneInPattern, _ := utf8.decode_rune(pattern);
 	outer: for i, size := 0, 0; i < len(str)-len(pattern)+1; i += size {
@@ -86,6 +85,54 @@ indexOf :: proc(str, pattern: string) -> int {
 	
 	return index;
 }
+
+lastIndexOf :: proc(str: string, s: rune) -> int {
+	for i, size := len(str)-1, 0; i >= 0; i -= size {
+		r: rune;
+		r, size = utf8.decode_rune(str[i..]);
+		if r == s {
+			return i;
+		}
+	}
+	return -1;
+}
+
+lastIndexOf :: proc(str: string, s: u8) -> int {
+	return lastIndexOf(str, rune(s));
+}
+
+lastIndexOf :: proc(str, pattern: string) -> int {
+	index := -1;
+	firstRuneInPattern, _ := utf8.decode_rune(pattern);
+	outer: for i, size := len(str)-1, 0; i >= 0; i -= size {
+		r: rune;
+		r, size = utf8.decode_rune(str[i..]);
+		if r == firstRuneInPattern {
+			index = i;
+			//fmt.printf("First match at %d\n", i);
+			inner: for j, size2 := 0, 0; j < len(pattern); j += size2 {
+				if j == len(pattern) {
+					//fmt.printf("j == len(pattern)-1 j: %d, len(pattern): %d\n", j, len(pattern));
+					index = i;
+					break outer;
+				}
+
+				t: rune;
+				r, size = utf8.decode_rune(str[i+j..]);
+				t, size2 = utf8.decode_rune(pattern[j..]);
+
+				//fmt.printf("r: %d, t: %d\n", r, t);
+				if r != t {
+					index = -1;
+					break inner;
+				}
+			}
+		}
+	}
+	
+	return index;
+}
+
 
 join :: proc(list: []string, d: string) -> string {
 	if len(list) == 0 {
@@ -227,18 +274,30 @@ main :: proc() {
 	fmt.printf("['a', 'b', 'c'].join(\" 😇 \") = %v\n", join([]string{"a","b","c"}, " 😇 "));
 	fmt.printf("['a', 'b', 'c'].join(\",\") = %v\n\n", join([]string{"a","b","c"}, u8(',')));
 	*/
-/*
+
+	fmt.printf("%v\n", lastIndexOf("😇abcd", '😇'));
+	fmt.printf("%v\n", lastIndexOf("abc😇d", '😇'));
+	fmt.printf("%v\n", lastIndexOf("abcd😇", '😇'));
+	fmt.printf("%v\n", lastIndexOf("abcd", '😇'));
+	/*
+	fmt.printf("'crmopn'.lastIndexOf(\"op\") = %v\n\n", lastIndexOf("crmopn", "op"));
+	fmt.printf("'crmopn'.lastIndexOf(\"pn\") = %v\n\n", lastIndexOf("crmopn", "pn"));
+	fmt.printf("'crmopn'.lastIndexOf(\"kr\") = %v\n\n", lastIndexOf("crmopn", "kr"));
+	fmt.printf("'crmopn'.lastIndexOf(\"kr\") = %v\n\n", lastIndexOf("crmopn", "cr"));
+	*/
+
+	/*
 	fmt.printf("'abc' = '%s'\n", trimStart("abc"));
 	fmt.printf("' 	abc' = '%s'\n", trimStart(" 	abc"));
 
 	fmt.printf("'abc' = '%s'\n", trimEnd("abc"));
 	fmt.printf("'abc 	' = '%s'\n", trimEnd("abc 	"));
 	fmt.printf("'abc    	' = '%s'\n", trimEnd("abc    	"));
-*/
+
 	fmt.printf("'abc' = '%s'\n", trim("abc"));
 	fmt.printf("' 	abc' = '%s'\n", trim(" 	abc"));
 	fmt.printf("'abc' = '%s'\n", trim("abc"));
 	fmt.printf("'abc 	' = '%s'\n", trim("abc 	"));
-	
+*/	
 }
 
