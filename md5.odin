@@ -43,7 +43,7 @@ __rol :: proc(val, shifts: u32) -> u32 {
 }
 
 __cpy :: proc(src: ^[]u8, dst: ^[]u8, offset, count: int) {
-	for i := offset; i < count; i++ {
+	for i in offset..count {
 		dst[i] = src[i];
 	}
 }
@@ -93,14 +93,14 @@ hash :: proc(data_in: []u8) -> string {
 	__cpy(&data_in, &padded, 0, dataLen);
 	padded[dataLen] = 0x80;
 
-	for i := 8; i > 0; i-- {
+	for i := 8; i > 0; i -= 1 {
 		padded[newLen-i] = u8((dataLen*8) >> uint(((8 - i) * 8)) & 0x00000000000000ff);
 	}
 
 	pwLen := newLen/4;
 	paddedWord := make([]u32, pwLen); //len(padded) / size_of(u32)
 	defer free(paddedWord);
-	for i := 0; i < len(paddedWord); i++ {
+	for i in 0..len(paddedWord) {
 		a := u32(u32(padded[(i * 4) + 0]) << (8 * 0));
 		b := u32(u32(padded[(i * 4) + 1]) << (8 * 1));
 		c := u32(u32(padded[(i * 4) + 2]) << (8 * 2));
@@ -114,10 +114,10 @@ hash :: proc(data_in: []u8) -> string {
 	D : u32 = 0x10325476;
 
 	
-	 for i in 0..<pwLen/16 {
+	 for i in 0..pwLen/16 {
 		X: [16]u32;
 
-		for j in 0..<16 {
+		for j in 0..16 {
 			X[j] = u32(paddedWord[i * 16 + j]);
 		}
 
@@ -203,16 +203,16 @@ hash :: proc(data_in: []u8) -> string {
 
 	outp := make([]u8, 16);
 	defer free(outp);
-	for i in 0..<4 {
+	for i in 0..4 {
 		outp[i + 0] = u8(A >> u8(i * 8));
 	}
-	for i in 0..<4{
+	for i in 0..4{
 		outp[i + 4] = u8(B >> u8(i * 8));
 	}
-	for i in 0..<4 {
+	for i in 0..4 {
 		outp[i + 8] = u8(C >> u8(i * 8));
 	}
-	for i in 0..<4 {
+	for i in 0..4 {
 		outp[i +12] = u8(D >> u8(i * 8));
 	}
 
@@ -228,5 +228,9 @@ hash :: proc(data_in: []u8) -> string {
 		outps[i * 2 + 1] = hexChars[bl];
 	}
 	return string(outps);
+	
+}
+
+main :: proc() {
 	
 }

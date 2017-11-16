@@ -1,7 +1,6 @@
-import(
-	fmt "fmt.odin";	
-	str "../../str.odin";
-);
+import "core:fmt.odin";
+import str "../../str.odin";
+
 
 run :: proc() {
 	using fmt;

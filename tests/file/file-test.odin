@@ -1,11 +1,11 @@
-import(
-	file "../../file.odin";
-	fmt "fmt.odin";
-);
+import	file "../../file.odin";
+import "core:fmt.odin";
+
 
 run :: proc(testFile: string) {
 	lines: []string;
 	s: bool;
+
 	lines, s = file.read_lines(testFile);
 	defer free(lines);
 
@@ -28,6 +28,7 @@ run :: proc(testFile: string) {
 	for line, i in lines {
 		fmt.printf("#%d ", i);
 		fmt.printf("'%s' == '%s' = %v\n", line, expected[i], line == expected[i]);
+		assert(line == expected[i]);
 	}
 	
 }

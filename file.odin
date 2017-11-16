@@ -1,8 +1,6 @@
-import( 
-	os "os.odin";
-	utf8 "utf8.odin";
-	fmt "fmt.odin";
-);
+import	os "core:os.odin";
+import utf8 "core:utf8.odin";
+import fmt "core:fmt.odin";
 
 read_lines :: proc(path: string) -> ([]string, bool) {
 
@@ -25,10 +23,10 @@ read_lines :: proc(path: string) -> ([]string, bool) {
 	fileLength := len(fileCont);
 	lineCount := 1;
 	lastNewline := 0;
-	for i := 0; i < fileLength; i++ {
+	for i := 0; i < fileLength; i += 1 {
 		nl, nll := is_newline(i, fileCont);
 		if nl {
-			lineCount++;
+			lineCount += 1;
 			lastNewline = i;
 			i += nll-1;
 		}
@@ -47,18 +45,18 @@ read_lines :: proc(path: string) -> ([]string, bool) {
 				lines[foundLines] = "";	
 			}
 			else {
-				lines[foundLines] = string(fileCont[offset..<i]);
+				lines[foundLines] = string(fileCont[offset..i]);
 			}
 
-			foundLines++;
-			i += nll-1;
-			offset = i+1;
+			foundLines += 1;
+			i += nll - 1;
+			offset = i + 1;
 
 		} 
 
-		eof := i >= fileLength-1;
+		eof := i >= fileLength - 1;
 		if eof {
-			lines[foundLines] = string(fileCont[offset..<fileLength]);
+			lines[foundLines] = string(fileCont[offset..fileLength]);
 			break;
 		}
 		

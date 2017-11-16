@@ -1,7 +1,6 @@
-import(
-	"fmt.odin";
-	"utf8.odin";
-);
+import	"core:fmt.odin";
+import "core:utf8.odin";
+
 
 startsWith :: proc(str, s: string) -> bool {
 	if len(s) > len(str) {
@@ -146,8 +145,8 @@ join :: proc(list: []string, d: string) -> string {
 
 	newStr := make([]u8, 0, newLen);
 	for s, i in list {
-		append(&newStr, ..[]u8(s));
-		append(&newStr, ..[]u8(d));
+		append(&newStr, ...cast([]u8)s);
+		append(&newStr, ...cast([]u8)d);
 	}
 	return string(newStr);
 
@@ -167,7 +166,7 @@ split :: proc(input: string, d: rune) -> []string {
 	inputLen := len(input);
 	for b in input {
 		if b == d {
-			delCount++;
+			delCount += 1;
 		}
 	}
 
@@ -178,17 +177,17 @@ split :: proc(input: string, d: rune) -> []string {
 		r, size = utf8.decode_rune(input[i..]);
 
 		if r == d {
-			lines[foundLines] = string(input[offset..<i]);
+			lines[foundLines] = string(input[offset..i]);
 			
 
-			foundLines++;
+			foundLines += 1;
 			//i += 1;
-			offset = i+1;
+			offset = i + 1;
 		}
 
 		eof := i >= inputLen-1;
 		if eof {
-			lines[foundLines] = string(input[offset..<inputLen]);
+			lines[foundLines] = string(input[offset..inputLen]);
 			break;
 		}	
 	}
